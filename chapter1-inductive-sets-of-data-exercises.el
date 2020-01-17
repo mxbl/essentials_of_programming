@@ -108,3 +108,53 @@
 	   (equal s1 s2))
       t
     nil))
+
+;; Excercise 1.19
+;; (list-set lst n x) -> return a list like lst, except that the n-th element, using zero-based indexing, is x 
+(defun list-set (lst n x)
+  (if (= n 0)
+      (cons x (cdr lst))
+    (cons (car lst)
+	  (list-set (cdr lst) (- n 1) x))))
+
+(list-set '(1 2 3) 4 '(0 1 2))
+
+;; Excercise 1.20
+;; (count-occurrences s slist) -> return the number of occurrences of s in slist
+;; NOTE: slist is a list of symbols, numbers or strings as list members break the function
+(defun count-occurrences (s slist)
+  (if (null slist) 0
+    (+ (count-occurrences-sexp s (car slist))
+       (count-occurrences s (cdr slist)))))
+
+(defun count-occurrences-sexp (s sexp)
+  (if (symbolp sexp)
+      (cond
+       ((equal s sexp) 1)
+       (t
+	0))
+    (count-occurrences s sexp)))
+
+(count-occurrences 'x '(a b c x d e x f x))
+(numberp 1) ; => t
+(numberp 'x) ; => nil
+(stringp "") ; => t
+
+;; Excercise 1.21
+;; (product los1 los2) -> calculate the cartesian product of those two list of symbols
+;; (a b c) x (x y) => ((a x) (a y) (b y) (b y) (c x) (c y))
+(defun product (los1 los2)
+  (if (null los1) ()
+    (append (product-aux (car los1) los2)
+	    (product (cdr los1) los2))))
+
+(defun product-aux (s los)
+  (if (null los) ()
+    (cons (list s (car los))
+	  (product-aux s (cdr los)))))
+
+(product '(a b c) '(x y))
+(product '(a) '(x y))
+
+(append '((a x) (a y)) '((b x) (b y)))
+(cons '(a b c) '(x y))
