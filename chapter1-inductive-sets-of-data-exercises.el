@@ -233,4 +233,37 @@
 
 ;; Exercise 1.28
 ;; (merge loi1 loi2) -> merge 2 sorted list of integers into 1 sorted list
-(defun merge (loi1 loi2))
+(defun merge (loi1 loi2)
+  (cond
+   ((null loi1) loi2)
+   ((null loi2) loi1)
+   (t
+    (if (< (car loi1) (car loi2))
+	(cons (car loi1) (merge (cdr loi1) loi2))
+      (cons (car loi2) (merge loi1 (cdr loi2)))))))
+
+(merge '(1 3 7 8 11 27) '(2 4 9 13))
+(merge '() '(1 2))
+(merge '() '())
+
+
+;; Exercise 1.36
+(defun number-elements (lst)
+  (number-elements-from lst 0))
+
+(defun number-elements-from (lst n)
+  (if (null lst) ()
+    (cons
+     (list n (car lst))
+     (number-elements-from (cdr lst) (+ n 1)))))
+
+(number-elements '(x y z))
+
+(defun number-elements-2 (lst)
+  (if (null lst) ()
+    (g (list 0 (car lst)) (number-elements-2 (cdr lst)))))
+
+(defun g (fst rst)
+  ())
+
+(cdr '(a))

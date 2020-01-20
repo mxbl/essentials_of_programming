@@ -99,13 +99,21 @@
 
 ;; Exercise 1.35
 (defun number-leaves (tree)
-  (number-leaves-aux 0 tree))
+  (nth 1 (number-leaves-aux 0 tree)))
 
 (defun number-leaves-aux (n tree)
-  (if (leaf? tree) (leaf n)
-    (interior-node (label tree)
-		   (number-leaves-aux n (lson tree))
-		   (number-leaves-aux n (rson tree)))))
+  (if (leaf? tree) (list (+ n 1) (leaf n))
+    (let* ((left  (number-leaves-aux-2 n (lson tree)))
+	   (right (number-leaves-aux-2 (car left) (rson tree))))
+      (list (car right) (interior-node (label tree)
+				       (nth 1 left)
+				       (nth 1 right))))))
+
+(nth 1 (list 1 (leaf 1)))
+(number-leaves
+ (interior-node 'foo
+		(leaf 1)
+		(leaf 2)))
 
 (number-leaves
  (interior-node 'foo
