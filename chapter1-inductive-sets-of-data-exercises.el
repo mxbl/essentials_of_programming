@@ -158,3 +158,79 @@
 
 (append '((a x) (a y)) '((b x) (b y)))
 (cons '(a b c) '(x y))
+
+;; Exercise 1.22
+;; (filter-in pred lst) -> return the list of those elements in lst that satisfy the predicate pred
+(defun filter-in (pred lst)
+  (if (null lst) ()
+    (if (apply pred (list (car lst)))
+	(cons (car lst) (filter-in pred (cdr lst)))
+      (filter-in pred (cdr lst)))))
+
+;; testing
+(filter-in 'symbolp '(1 2 3 4 a 5 6 b))
+(filter-in 'symbolp '(1 2))
+(if nil
+    '(a)
+  '())
+(listp '())
+(progn
+  'a)
+(apply 'symbolp '(1)) ; => nil
+
+;; Exercise 1.23
+;; (list-index pred lst) -> return the 0-based position of the first element of lst that
+;; satisfies the predicate pred
+(defun list-index (pred lst)
+  (list-index-aux pred lst 0))
+
+;; (list-index-aux pred lst index) -> aux function for list-index, for 0-based positioning
+;; call with index 0, for 1-based with 1
+(defun list-index-aux (pred lst index)
+  (if (null lst) nil
+    (or (if (apply pred (list (car lst)))
+	    index
+	  nil)
+	(list-index-aux pred (cdr lst) (+ index 1)))))
+
+;; testing
+;; NOTE: or evals args until one of them yields non-nil and the returns that value
+(or nil 1 2 t)
+(list-index 'symbolp '(1 2 x 2 3 a))
+
+;; Exercise 1.24 and 1.25
+;; (every? pred lst) -> returns nil (#f) if any element in lst fails to satisfy pred,
+;; and return t (#t) otherwise
+(defun every? (pred lst)
+  (if (null lst) t
+    (and (apply pred (list (car lst)))
+	 (every? pred (cdr lst)))))
+
+;; (exists? pred lst) -> return t if any element in lst satisfies pred, return nil otherwise
+(defun exists? (pred lst)
+  (if (null lst) nil
+    (or (apply pred (list (car lst)))
+	(exists? pred (cdr lst)))))
+
+;; testing
+(every? 'symbolp '(1 2 3 4 a)) ; => nil
+(every? 'numberp '(1 2 3 4)) ; => t
+(every? 'symbolp '(b c d a)) ; => t
+(numberp '())
+(exists? 'numberp '(a b c d 1 e)) ; => t
+
+;; Exercise 1.26 and 1.27
+(defun up (lst)
+  (if (null lst) ()
+    (append (car lst)
+	    (up (cdr lst)))))
+
+(defun flatten (slist))
+
+;; testing
+(up '(1 (1.1 1.2) 2 3 (4 5) 6))
+(append (list '(3)) '(4 5))
+
+;; Exercise 1.28
+;; (merge loi1 loi2) -> merge 2 sorted list of integers into 1 sorted list
+(defun merge (loi1 loi2))
